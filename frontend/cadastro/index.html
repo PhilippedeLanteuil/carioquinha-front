@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CarioquinhaRio • Cadastro</title>
+  <link rel="stylesheet" href="../shared/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">CR</div>
+        <div>
+          <div class="brand-title">CarioquinhaRio</div>
+          <div class="brand-subtitle">Cadastro & Consulta de Nascimentos</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a class="pill active" href="./index.html">🍼 Cadastro</a>
+        <a class="pill" href="../consulta/index.php">🔎 Consulta</a>
+      </nav>
+    </header>
+
+    <section class="card hero">
+      <div>
+        <h1>Registrar um novo nascimento 🌸</h1>
+        <p>
+          Preencha os dados abaixo para registrar o bebê na maternidade.
+        </p>
+        <div class="chips">
+          <span class="chip blue">Azul pastel</span>
+          <span class="chip pink">Rosa pastel</span>
+          <span class="chip cream">Tema maternidade</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Cadastro de nascimento</h2>
+      <p class="muted">Campos com * são obrigatórios.</p>
+
+      <form id="formBebe" class="form">
+        <div class="row">
+          <div class="field">
+            <label>Nome do bebê *</label>
+            <input id="nomeBebe" required placeholder="Ex.: Maria Clara" />
+          </div>
+
+          <div class="field">
+            <label>Data de nascimento *</label>
+            <input id="dataNascimento" type="date" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Nome da mãe *</label>
+            <input id="nomeMae" required placeholder="Ex.: Ana Souza" />
+          </div>
+
+          <div class="field">
+            <label>Nome do pai *</label>
+            <input id="nomePai" required placeholder="Ex.: João Souza" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Maternidade *</label>
+          <select id="maternidadeId" required>
+            <option value="">Carregando...</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Mensagem do responsável *</label>
+          <textarea id="mensagem" required placeholder="Escreva uma mensagem especial"></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" type="submit" id="btnSalvar">
+            Salvar cadastro
+          </button>
+          <button class="btn ghost" type="button" id="btnLimpar">
+            Limpar
+          </button>
+        </div>
+
+        <div id="toast" class="toast"></div>
+      </form>
+    </section>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "maternidades": [
+    { "id": 1, "nome": "Maternidade Esperança" },
+    { "id": 2, "nome": "Maternidade Flor do Mar" },
+    { "id": 3, "nome": "Maternidade Sol Nascente" }
+  ],
+  "bebes": [],
+  "nextBebeId": 1
+}
