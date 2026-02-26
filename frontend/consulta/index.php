@@ -1,6 +1,6 @@
 <?php
-// ✅ Use 127.0.0.1 para evitar travas com IPv6 (::1)
-$API_BASE = "http://127.0.0.1:8000/api/index.php";
+// ✅ Agora a API é o Quarkus
+$API_BASE = "http://localhost:8080";
 
 $erro = null;
 $bebes = null;
@@ -36,11 +36,14 @@ function h($s) {
 }
 
 function fmt_date_br($iso) {
-  // yyyy-mm-dd -> dd/mm/yyyy
+  // Pega só yyyy-mm-dd (Quarkus pode retornar 2026-02-25T00:00:00)
   if (!is_string($iso) || strlen($iso) < 10) return $iso;
-  $y = substr($iso, 0, 4);
-  $m = substr($iso, 5, 2);
-  $d = substr($iso, 8, 2);
+
+  $base = substr($iso, 0, 10); // yyyy-mm-dd
+  $y = substr($base, 0, 4);
+  $m = substr($base, 5, 2);
+  $d = substr($base, 8, 2);
+
   if (!ctype_digit($y.$m.$d)) return $iso;
   return $d . "/" . $m . "/" . $y;
 }
@@ -54,7 +57,7 @@ $body = http_get($API_BASE . "/maternidades", $status);
 if ($status >= 200 && $status < 300 && $body) {
   $maternidades = safe_arr(json_decode($body, true));
 } elseif ($status === 0) {
-  $erro = "❌ Não consegui acessar a API mock. Rode na raiz do projeto: php -S 127.0.0.1:8000";
+  $erro = "❌ Não consegui acessar o backend. Verifique se o Quarkus está rodando em http://localhost:8080";
 }
 
 /* ===============================
@@ -77,12 +80,12 @@ if ($erro === null && !empty($_GET)) {
   } elseif ($status >= 200 && $status < 300 && $body) {
     $bebes = safe_arr(json_decode($body, true));
 
-    // ✅ Garantir ordenação A–Z por nomeBebe (mesmo que a API já ordene)
+    // ✅ Ordenação A–Z por "nome" (agora é o campo do backend)
     usort($bebes, function($a, $b) {
-      return strcasecmp($a["nomeBebe"] ?? "", $b["nomeBebe"] ?? "");
+      return strcasecmp($a["nome"] ?? "", $b["nome"] ?? "");
     });
   } elseif ($status === 0) {
-    $erro = "❌ API não respondeu (timeout). Verifique se o servidor PHP está rodando.";
+    $erro = "❌ API não respondeu (timeout). Verifique se o Quarkus está rodando.";
   } else {
     $erro = "❌ Erro na API (HTTP $status)";
   }
@@ -121,7 +124,7 @@ $qtBebes = is_array($bebes) ? count($bebes) : 0;
       <div>
         <h1>Consulta com carinho 💙🌸</h1>
         <p>
-          Filtre por nome, data e maternidade. A listagem vem da <b>API mock</b> e é exibida em ordem alfabética.
+          Filtre por nome, data e maternidade. A listagem vem do <b>backend Quarkus</b> e é exibida em ordem alfabética.
         </p>
         <div class="chips">
           <span class="chip blue">Ordenado A–Z</span>
@@ -144,7 +147,7 @@ $qtBebes = is_array($bebes) ? count($bebes) : 0;
 
     <section class="card">
       <h2>Filtros</h2>
-      <p class="muted">Dica: nome é parcial (contém). Data deve ser exatamente igual.</p>
+      <p class="muted">Dica: nome é parcial (contém). Data filtra pelo dia.</p>
 
       <form method="GET" class="form">
         <div class="row">
@@ -211,16 +214,22 @@ $qtBebes = is_array($bebes) ? count($bebes) : 0;
             </thead>
             <tbody>
               <?php foreach ($bebes as $b): ?>
+                <?php
+                  $src = null;
+                  if (!empty($b["fotoBase64"]) && !empty($b["fotoMime"])) {
+                    $src = "data:" . $b["fotoMime"] . ";base64," . $b["fotoBase64"];
+                  }
+                ?>
                 <tr>
                   <td>
-                    <?php if (!empty($b["fotoUrl"])): ?>
-                      <img class="avatar" src="<?= h($b["fotoUrl"]) ?>" alt="Foto do bebê"/>
+                    <?php if ($src): ?>
+                      <img class="avatar" src="<?= h($src) ?>" alt="Foto do bebê"/>
                     <?php else: ?>
                       <span class="small">(sem foto)</span>
                     <?php endif; ?>
                   </td>
                   <td>
-                    <div style="font-weight:950;"><?= h($b["nomeBebe"] ?? "") ?></div>
+                    <div style="font-weight:950;"><?= h($b["nome"] ?? "") ?></div>
                     <div class="small">Pai: <?= h($b["nomePai"] ?? "") ?></div>
                   </td>
                   <td><?= h($b["nomeMae"] ?? "") ?></td>
@@ -239,7 +248,7 @@ $qtBebes = is_array($bebes) ? count($bebes) : 0;
 
         <hr/>
         <div class="small">
-          API mock: <code>/api/index.php</code> • Base: <code><?= h($API_BASE) ?></code>
+          Base: <code><?= h($API_BASE) ?></code>
         </div>
       </section>
     <?php endif; ?>

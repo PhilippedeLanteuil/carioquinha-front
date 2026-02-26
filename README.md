@@ -1,8 +1,3 @@
-Perfeito 👌
-Aqui está o **README pronto para você só copiar e colar** no arquivo `README.md` na raiz do projeto `carioquinha-front`.
-
----
-
 # 🍼 CarioquinhaRio - Frontend
 
 Frontend desenvolvido para o projeto **CarioquinhaRio**, responsável pelo cadastro e consulta de nascimentos em maternidades.
@@ -192,7 +187,3 @@ A API mock pode ser facilmente substituída por uma API real (ex: Quarkus), bast
 ## 👨‍💻 Autor
 
 Projeto desenvolvido como solução para o desafio técnico **CarioquinhaRio**.
-
----
-
-Se você quiser, posso agora deixar esse README com **badges de tecnologia**, versão mais corporativa para entrega formal, ou versão resumida para GitHub.

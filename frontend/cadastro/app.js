@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:8000/api/index.php";
+const API_BASE = "http://localhost:8080";
 
 const form = document.getElementById("formBebe");
 const toastEl = document.getElementById("toast");
@@ -55,20 +55,30 @@ btnLimpar.addEventListener("click", () => {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const data = document.getElementById("dataNascimento").value;
+
   const payload = {
-    nomeBebe: document.getElementById("nomeBebe").value.trim(),
-    dataNascimento: document.getElementById("dataNascimento").value,
+    // ✅ backend espera "nome"
+    nome: document.getElementById("nomeBebe").value.trim(),
+
+    // ✅ backend espera LocalDateTime no formato "yyyy-MM-dd HH:mm"
+    dataNascimento: data ? `${data} 00:00` : "",
+
     nomeMae: document.getElementById("nomeMae").value.trim(),
+
+    // ✅ opcional no backend
     nomePai: document.getElementById("nomePai").value.trim(),
+
     maternidadeId: Number(document.getElementById("maternidadeId").value),
+
     mensagemResponsavel: document.getElementById("mensagem").value.trim()
   };
 
+  // ✅ nomePai NÃO é obrigatório
   if (
-    !payload.nomeBebe ||
+    !payload.nome ||
     !payload.dataNascimento ||
     !payload.nomeMae ||
-    !payload.nomePai ||
     !payload.maternidadeId ||
     !payload.mensagemResponsavel
   ) {
@@ -81,7 +91,10 @@ form.addEventListener("submit", async (e) => {
   try {
     const { ok, status, json } = await fetchJson(`${API_BASE}/bebes`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Operador": "frontend"
+      },
       body: JSON.stringify(payload)
     });
 
@@ -101,4 +114,4 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-carregarMaternidades(); 
+carregarMaternidades();
