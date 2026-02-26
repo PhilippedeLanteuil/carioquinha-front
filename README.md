@@ -80,7 +80,7 @@ http://127.0.0.1:8000/frontend/cadastro/index.html
 ### 🔎 Tela de Consulta (PHP)
 
 ```
-http://127.0.0.1:8000/frontend/consulta/index.php
+http://127.0.0.1:8000/frontend/consulta/consulta.php
 ```
 
 ---
