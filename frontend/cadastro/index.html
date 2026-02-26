@@ -18,14 +18,14 @@
       </div>
 
       <nav class="nav">
-        <a class="pill active" href="./index.html">🍼 Cadastro</a>
-        <a class="pill" href="../consulta/index.php">🔎 Consulta</a>
+        <a class="pill active" href="./index.html">Cadastro</a>
+        <a class="pill" href="../consulta/consulta.php">Consulta</a>
       </nav>
     </header>
 
     <section class="card hero">
       <div>
-        <h1>Registrar um novo nascimento 🌸</h1>
+        <h1>Registrar um novo nascimento</h1>
         <p>
           Preencha os dados abaixo para registrar o bebê na maternidade.
         </p>
@@ -50,7 +50,7 @@
 
           <div class="field">
             <label>Data de nascimento *</label>
-            <input id="dataNascimento" type="date" required />
+            <input id="dataNascimento" type="datetime-local" required />
           </div>
         </div>
 
@@ -75,7 +75,7 @@
 
         <div class="field">
           <label>Mensagem do responsável *</label>
-          <textarea id="mensagem" required placeholder="Escreva uma mensagem especial"></textarea>
+          <textarea id="mensagem" placeholder="Escreva uma mensagem especial"></textarea>
         </div>
 
         <div class="actions">

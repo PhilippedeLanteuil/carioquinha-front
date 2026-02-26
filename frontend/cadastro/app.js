@@ -23,7 +23,7 @@ async function fetchJson(url, options = {}) {
   const res = await fetch(url, options);
   const text = await res.text();
   let json = null;
-  try { json = text ? JSON.parse(text) : null; } catch {}
+  try { json = text ? JSON.parse(text) : null; } catch { }
   return { ok: res.ok, status: res.status, json, text };
 }
 
@@ -49,32 +49,30 @@ async function carregarMaternidades() {
 
 btnLimpar.addEventListener("click", () => {
   form.reset();
-  showToast("Formulário limpo 🌸");
+  showToast("Formulário limpo");
 });
+
+function normalizarDataHoraParaBackend(datetimeLocalValue) {
+  if (!datetimeLocalValue) return "";
+  return datetimeLocalValue.replace("T", " ");
+}
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const data = document.getElementById("dataNascimento").value;
+  const dataNascimentoInput = document.getElementById("dataNascimento").value;
 
   const payload = {
-    // ✅ backend espera "nome"
     nome: document.getElementById("nomeBebe").value.trim(),
 
-    // ✅ backend espera LocalDateTime no formato "yyyy-MM-dd HH:mm"
-    dataNascimento: data ? `${data} 00:00` : "",
+    dataNascimento: normalizarDataHoraParaBackend(dataNascimentoInput),
 
     nomeMae: document.getElementById("nomeMae").value.trim(),
-
-    // ✅ opcional no backend
     nomePai: document.getElementById("nomePai").value.trim(),
-
     maternidadeId: Number(document.getElementById("maternidadeId").value),
-
     mensagemResponsavel: document.getElementById("mensagem").value.trim()
   };
 
-  // ✅ nomePai NÃO é obrigatório
   if (
     !payload.nome ||
     !payload.dataNascimento ||
@@ -99,7 +97,7 @@ form.addEventListener("submit", async (e) => {
     });
 
     if (ok) {
-      showToast("Cadastro realizado com sucesso! 🍼💙", "ok");
+      showToast("Cadastro realizado com sucesso!", "ok");
       form.reset();
       return;
     }

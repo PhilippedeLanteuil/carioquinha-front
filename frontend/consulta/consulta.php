@@ -1,5 +1,4 @@
 <?php
-// ✅ Agora a API é o Quarkus
 $API_BASE = "http://localhost:8080";
 
 $erro = null;
@@ -36,7 +35,6 @@ function h($s) {
 }
 
 function fmt_date_br($iso) {
-  // Pega só yyyy-mm-dd (Quarkus pode retornar 2026-02-25T00:00:00)
   if (!is_string($iso) || strlen($iso) < 10) return $iso;
 
   $base = substr($iso, 0, 10); // yyyy-mm-dd
@@ -48,21 +46,17 @@ function fmt_date_br($iso) {
   return $d . "/" . $m . "/" . $y;
 }
 
-/* ===============================
-   CARREGAR MATERNIDADES
-================================= */
+
 $status = 0;
 $body = http_get($API_BASE . "/maternidades", $status);
 
 if ($status >= 200 && $status < 300 && $body) {
   $maternidades = safe_arr(json_decode($body, true));
 } elseif ($status === 0) {
-  $erro = "❌ Não consegui acessar o backend. Verifique se o Quarkus está rodando em http://localhost:8080";
+  $erro = "Não consegui acessar o backend. Verifique se o Quarkus está rodando em http://localhost:8080";
 }
 
-/* ===============================
-   CONSULTAR BEBÊS (somente ao pesquisar)
-================================= */
+
 if ($erro === null && !empty($_GET)) {
   $params = [];
 
@@ -76,22 +70,20 @@ if ($erro === null && !empty($_GET)) {
   $body = http_get($url, $status);
 
   if ($status === 404) {
-    $erro = "⚠️ Nenhum bebê encontrado";
+    $erro = "Nenhum bebê encontrado";
   } elseif ($status >= 200 && $status < 300 && $body) {
     $bebes = safe_arr(json_decode($body, true));
 
-    // ✅ Ordenação A–Z por "nome" (agora é o campo do backend)
     usort($bebes, function($a, $b) {
       return strcasecmp($a["nome"] ?? "", $b["nome"] ?? "");
     });
   } elseif ($status === 0) {
-    $erro = "❌ API não respondeu (timeout). Verifique se o Quarkus está rodando.";
+    $erro = "API não respondeu (timeout). Verifique se o Quarkus está rodando.";
   } else {
-    $erro = "❌ Erro na API (HTTP $status)";
+    $erro = "Erro na API (HTTP $status)";
   }
 }
 
-// contadores (para cards)
 $qtMats = is_array($maternidades) ? count($maternidades) : 0;
 $qtBebes = is_array($bebes) ? count($bebes) : 0;
 ?>
@@ -115,14 +107,14 @@ $qtBebes = is_array($bebes) ? count($bebes) : 0;
       </div>
 
       <nav class="nav">
-        <a class="pill" href="../cadastro/index.html">🍼 Cadastro</a>
-        <a class="pill active" href="./index.php">🔎 Consulta</a>
+        <a class="pill" href="../cadastro/index.html">Cadastro</a>
+        <a class="pill active" href="./index.php">Consulta</a>
       </nav>
     </header>
 
     <section class="card hero">
       <div>
-        <h1>Consulta com carinho 💙🌸</h1>
+        <h1>Consulta Cadastro de Bebes</h1>
         <p>
           Filtre por nome, data e maternidade. A listagem vem do <b>backend Quarkus</b> e é exibida em ordem alfabética.
         </p>
@@ -188,7 +180,7 @@ $qtBebes = is_array($bebes) ? count($bebes) : 0;
         </div>
 
         <?php if ($erro): ?>
-          <div class="toast show <?= (str_starts_with($erro, "⚠️")) ? "ok" : "err" ?>">
+          <div class="toast show <?= (str_starts_with($erro)) ? "ok" : "err" ?>">
             <?= h($erro) ?>
           </div>
         <?php endif; ?>
