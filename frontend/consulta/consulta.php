@@ -66,6 +66,7 @@ if ($erro === null && !empty($_GET)) {
 
   $url = $API_BASE . "/bebes" . (count($params) ? "?" . http_build_query($params) : "");
 
+
   $status = 0;
   $body = http_get($url, $status);
 
@@ -108,7 +109,16 @@ $qtBebes = is_array($bebes) ? count($bebes) : 0;
 
       <nav class="nav">
         <a class="pill" href="../cadastro/index.html">Cadastro</a>
-        <a class="pill active" href="./index.php">Consulta</a>
+
+        <?php
+          $current = basename($_SERVER['PHP_SELF']);
+        ?>
+
+        <a class="pill <?= $current == 'consulta.php' ? 'active' : '' ?>"
+          <?= $current == 'consulta.php' ? '' : 'href="./index.php"' ?>>
+          Consulta
+        </a>
+
       </nav>
     </header>
 
@@ -172,7 +182,7 @@ $qtBebes = is_array($bebes) ? count($bebes) : 0;
             <label>&nbsp;</label>
             <div class="actions">
               <button class="btn primary" type="submit">Pesquisar</button>
-              <a class="btn ghost" href="./index.php" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
+              <a class="btn ghost" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
                 Limpar filtros
               </a>
             </div>
@@ -180,7 +190,7 @@ $qtBebes = is_array($bebes) ? count($bebes) : 0;
         </div>
 
         <?php if ($erro): ?>
-          <div class="toast show <?= (str_starts_with($erro)) ? "ok" : "err" ?>">
+          <div class="toast show <?= $erro ? "err" : "ok" ?>">
             <?= h($erro) ?>
           </div>
         <?php endif; ?>
