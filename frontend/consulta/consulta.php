@@ -182,9 +182,6 @@ $qtBebes = is_array($bebes) ? count($bebes) : 0;
             <label>&nbsp;</label>
             <div class="actions">
               <button class="btn primary" type="submit">Pesquisar</button>
-              <a class="btn ghost" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
-                Limpar filtros
-              </a>
             </div>
           </div>
         </div>
